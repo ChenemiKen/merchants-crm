@@ -1,0 +1,42 @@
+{
+  "name": "merchant-crm",
+  "version": "1.0.0",
+  "description": "A merchant management system",
+  "homepage": "https://github.com/ChenemiKen/merchants-crm#readme",
+  "bugs": {
+    "url": "https://github.com/ChenemiKen/merchants-crm/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChenemiKen/merchants-crm.git"
+  },
+  "license": "ISC",
+  "author": "ChenemiKen",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
+    "lint": "eslint 'src/**/*.ts'"
+  },
+  "dependencies": {
+    "express": "^4.22.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.3.5",
+    "dotenv": "^17.3.1",
+    "eslint": "^10.0.3",
+    "install": "^0.13.0",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.14",
+    "npm": "^11.11.0",
+    "prettier": "^3.8.1",
+    "ts-jest": "^29.4.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
