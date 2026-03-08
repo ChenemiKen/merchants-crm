@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import authRoutes from './routes/auth.route';
 import { drizzle } from 'drizzle-orm/node-postgres';
+import { errorHandler, unknownEndpoint } from './middleware/errorhandler.middleware';
 
 const app = express();
 
@@ -13,13 +14,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api/v1/auth', authRoutes);
 
-
-// You can specify any property from the node-postgres connection options
-const db = drizzle({
-    connection: {
-        connectionString: process.env.DATABASE_URL!,
-        ssl: true
-    }
-});
+app.use(errorHandler)
+app.use(unknownEndpoint)
 
 export default app;

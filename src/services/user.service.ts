@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 // import { generateToken } from '../../../utils/generate-token.util';
 import { SignupDto, LoginDto } from '../domain/models/dto/auth.dto';
 import { UserRepository } from '@/db/repositories/user.repository';
+import { DuplicateModelException } from '@/constants/exceptions';
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) { }
@@ -13,13 +14,12 @@ export class UserService {
 
     const existingUser = await this.userRepository.existsByEmail(email);
     if (existingUser) {
-      throw Error("user already exists");
+      throw new DuplicateModelException("User already exists");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await this.userRepository.create({
-      // id: this.idGenerator.generate(),
       email,
       password: hashedPassword,
       name,
