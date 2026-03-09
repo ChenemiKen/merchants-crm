@@ -1,6 +1,7 @@
 import { uuid, pgTable, timestamp, text, pgEnum, boolean } from 'drizzle-orm/pg-core';
 import { merchants } from './merchant.schema';
 import { userTable } from './user.schema';
+import { InferSelectModel } from 'drizzle-orm';
 
 export const documentTypeEnum = pgEnum("document_type", [
     "BUSINESS_REGISTRATION",
@@ -25,5 +26,8 @@ export const merchantDocuments = pgTable("merchant_documents", {
 
     verifiedAt: timestamp("verified_at"),
 
-    createdAt: timestamp("created_at").defaultNow()
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow(),
 })
+
+export type MerchantDocumentEntity = InferSelectModel<typeof merchantDocuments>;

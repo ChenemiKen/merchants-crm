@@ -30,13 +30,13 @@ export const UpdateMerchantSchema = z.object({
 
 // Create Merchant Document Schema
 export const CreateMerchantDocumentSchema = z.object({
-    merchantId: z.string().uuid("Invalid merchant ID"),
     type: DocumentTypeEnum,
     fileUrl: z.string().url("Invalid file URL"),
 });
 
 // Update Merchant Document Schema (e.g., verifying)
 export const UpdateMerchantDocumentSchema = z.object({
+    type: DocumentTypeEnum,
     verified: z.boolean().optional(),
     fileUrl: z.string().url("Invalid file URL").optional(),
 });
