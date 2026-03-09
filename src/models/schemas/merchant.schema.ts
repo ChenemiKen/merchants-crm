@@ -26,19 +26,6 @@ export const UpdateMerchantSchema = z.object({
     contactEmail: z.string().email("Invalid file URL").max(255).optional(),
 });
 
-// Create Merchant Document Schema
-export const CreateMerchantDocumentSchema = z.object({
-    type: DocumentTypeEnum,
-    fileUrl: z.string().url("Invalid file URL"),
-});
-
-// Update Merchant Document Schema (e.g., verifying)
-export const UpdateMerchantDocumentSchema = z.object({
-    type: DocumentTypeEnum,
-    verified: z.boolean().optional(),
-    fileUrl: z.string().url("Invalid file URL").optional(),
-});
-
 // Update Merchant Status Schema
 export const UpdateMerchantStatusSchema = z.object({
     status: MerchantStatusEnum,
@@ -58,7 +45,21 @@ export const MerchantQuerySchema = z.object({
 export type MerchantStatus = z.infer<typeof MerchantStatusEnum>;
 export type CreateMerchantDto = z.infer<typeof CreateMerchantSchema>;
 export type UpdateMerchantDto = z.infer<typeof UpdateMerchantSchema>;
-export type CreateMerchantDocumentDto = z.infer<typeof CreateMerchantDocumentSchema>;
-export type UpdateMerchantDocumentDto = z.infer<typeof UpdateMerchantDocumentSchema>;
 export type UpdateMerchantStatusDto = z.infer<typeof UpdateMerchantStatusSchema>;
 export type MerchantQueryDto = z.infer<typeof MerchantQuerySchema>;
+
+
+// Create Merchant Document Schema
+export const CreateMerchantDocumentSchema = z.object({
+    type: DocumentTypeEnum,
+    fileUrl: z.string().url("Invalid file URL"),
+});
+
+// Update Merchant Document Schema
+export const UpdateMerchantDocumentSchema = z.object({
+    type: DocumentTypeEnum,
+    fileUrl: z.string().url("Invalid file URL").optional(),
+});
+
+export type CreateMerchantDocumentDto = z.infer<typeof CreateMerchantDocumentSchema>;
+export type UpdateMerchantDocumentDto = z.infer<typeof UpdateMerchantDocumentSchema>;

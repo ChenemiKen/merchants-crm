@@ -1,3 +1,4 @@
+import { InferSelectModel } from 'drizzle-orm';
 import { uuid, pgTable, varchar, timestamp, pgEnum } from 'drizzle-orm/pg-core';
 
 export const merchantStatusEnum = pgEnum("merchant_status", [
@@ -23,3 +24,5 @@ export const merchants = pgTable("merchants", {
 
     updatedAt: timestamp("updated_at").defaultNow()
 })
+
+export type MerchantEntity = InferSelectModel<typeof merchants>;

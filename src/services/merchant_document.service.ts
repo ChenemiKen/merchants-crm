@@ -37,9 +37,24 @@ export default class MerchantDocumentService {
         return doc;
     }
 
-    update = async (merchantId: string, data: UpdateMerchantDocumentDto) => {
+    update = async (documentId: string, data: UpdateMerchantDocumentDto) => {
         // Ensure merchant exists first
+        const document = await this.fetchOne(documentId);
+        const doc = await this.merchantDocumentRepository.findByMerchantIdAndType(document.merchantId, data.type)
+        if (doc && doc.id !== documentId) {
+            throw new DuplicateModelException(
+                `document type ${data.type} already exists for this merchant`)
+        }
+        return await this.merchantDocumentRepository.update(documentId, data);
+    }
+
+    verify = async (merchantId: string, userId: string) => {
         await this.fetchOne(merchantId);
+        const data = {
+            verified: true,
+            verifiedBy: userId,
+            verifiedAt: new Date(),
+        }
         return await this.merchantDocumentRepository.update(merchantId, data);
     }
 }

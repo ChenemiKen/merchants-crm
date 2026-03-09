@@ -1,7 +1,7 @@
 import { CreateMerchantDocumentDto, UpdateMerchantDocumentDto } from "@/models/schemas/merchant.schema";
 import { Database } from "../database";
 import { and, eq } from "drizzle-orm";
-import { merchantDocuments } from "../schemas/merchant_document.schema";
+import { MerchantDocumentEntity, merchantDocuments } from "../schemas/merchant_document.schema";
 
 
 export default class MerchantDocumentRepository {
@@ -34,7 +34,7 @@ export default class MerchantDocumentRepository {
 
     async findByMerchantIdAndType(merchantId: string, type: CreateMerchantDocumentDto['type']) {
         const db = this.database.getInstance();
-        return await db.query.merchantDocuments.findMany({
+        return await db.query.merchantDocuments.findFirst({
             where: and(
                 eq(merchantDocuments.merchantId, merchantId),
                 eq(merchantDocuments.type, type)
@@ -49,7 +49,7 @@ export default class MerchantDocumentRepository {
         });
     }
 
-    async update(documentId: string, data: UpdateMerchantDocumentDto) {
+    async update(documentId: string, data: Partial<MerchantDocumentEntity>) {
         const db = this.database.getInstance();
 
         const [updated] = await db

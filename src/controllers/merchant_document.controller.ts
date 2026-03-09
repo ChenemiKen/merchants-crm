@@ -6,6 +6,7 @@ import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
 const INVALID_MERCHANT_ID = "Invalid merchant ID";
+const INVALID_DOCUMENT_ID = "Invalid document ID";
 
 export class MerchantDocumentController {
     private readonly merchantDocumentService: MerchantDocumentService;
@@ -48,10 +49,9 @@ export class MerchantDocumentController {
 
     fetchOne = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
         try {
-            const msg = "Invalid document ID";
-            const parsed = z.string().uuid(msg).safeParse(req.params.id);
+            const parsed = z.string().uuid(INVALID_DOCUMENT_ID).safeParse(req.params.id);
             if (!parsed.success) {
-                throw new ValidationException(msg, msg);
+                throw new ValidationException(INVALID_DOCUMENT_ID, INVALID_DOCUMENT_ID);
             }
             const result = await this.merchantDocumentService.fetchOne(parsed.data);
             sendSuccess(res, 200, result);
@@ -62,12 +62,25 @@ export class MerchantDocumentController {
 
     update = async (req: Request<{ id: string }, {}, UpdateMerchantDocumentDto>, res: Response, next: NextFunction) => {
         try {
-            const msg = "Invalid document ID";
-            const parsed = z.string().uuid(msg).safeParse(req.params.id);
+            const parsed = z.string().uuid(INVALID_DOCUMENT_ID).safeParse(req.params.id);
             if (!parsed.success) {
-                throw new ValidationException(msg, msg);
+                throw new ValidationException(INVALID_DOCUMENT_ID, INVALID_DOCUMENT_ID);
             }
             const updated = await this.merchantDocumentService.update(parsed.data, req.body);
+            sendSuccess(res, 200, updated);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    verify = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+        try {
+            const parsed = z.string().uuid(INVALID_DOCUMENT_ID).safeParse(req.params.id);
+            if (!parsed.success) {
+                throw new ValidationException(INVALID_DOCUMENT_ID, INVALID_DOCUMENT_ID);
+            }
+
+            const updated = await this.merchantDocumentService.verify(parsed.data, req.user!.id);
             sendSuccess(res, 200, updated);
         } catch (error) {
             next(error);

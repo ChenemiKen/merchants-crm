@@ -20,8 +20,9 @@ const merchantDocumentController = new MerchantDocumentController(merchantDocume
 
 router.post("/:merchantId/documents", auth, validateRequest(CreateMerchantDocumentSchema), merchantDocumentController.create)
 router.get("/:merchantId/documents", auth, merchantDocumentController.fetchByMerchantId)
+router.patch("/documents/:id", auth, validateRequest(UpdateMerchantDocumentSchema), merchantDocumentController.update)
 router.get("/documents/:id", auth, merchantDocumentController.fetchOne)
-router.put("/:merchantId/documents/:id", auth, validateRequest(UpdateMerchantDocumentSchema), merchantDocumentController.update)
+router.patch("/documents/:id/verify", auth, merchantDocumentController.verify)
 
 export default router;
 
