@@ -6,6 +6,8 @@ import * as refreshTokenSchema from './schemas/refresh_token.schema';
 import * as merchantSchema from './schemas/merchant.schema';
 import * as merchantDocumentSchema from './schemas/merchant_document.schema';
 import * as merchantStatusHistorySchema from './schemas/merchant_status_history.schema';
+import * as notificationSchema from './schemas/notification.schema';
+import * as notificationSubscriberSchema from './schemas/notification_subscriber.schema';
 import { env, integerEnv } from '../config/env';
 
 export type DatabaseConfig = {
@@ -21,7 +23,7 @@ export type DatabaseConfig = {
 const buildDrizzle = (pool: Pool) => drizzle({
   schema: {
     ...userSchema, ...refreshTokenSchema, ...merchantSchema, ...merchantDocumentSchema,
-    ...merchantStatusHistorySchema
+    ...merchantStatusHistorySchema, ...notificationSchema, ...notificationSubscriberSchema
   },
   client: pool,
 });
