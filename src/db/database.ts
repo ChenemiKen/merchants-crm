@@ -3,6 +3,7 @@ import { Pool } from 'pg';
 
 import * as userSchema from './schemas/user.schema';
 import * as refreshTokenSchema from './schemas/refresh_token.schema';
+import * as merchantSchema from './schemas/merchant.schema';
 import { env, integerEnv } from '../config/env';
 
 export type DatabaseConfig = {
@@ -16,7 +17,7 @@ export type DatabaseConfig = {
 
 // Helper function to create db instance with proper typing
 const buildDrizzle = (pool: Pool) => drizzle({
-  schema: { ...userSchema, ...refreshTokenSchema },
+  schema: { ...userSchema, ...refreshTokenSchema, ...merchantSchema },
   client: pool,
 });
 
