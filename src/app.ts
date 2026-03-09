@@ -13,7 +13,7 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!');
 });
 
-app.use('/api/v1/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 
 app.use(errorHandler)
 app.use(unknownEndpoint)

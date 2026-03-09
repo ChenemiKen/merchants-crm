@@ -21,18 +21,18 @@ export class AuthController {
   signup = async (req: Request<{}, {}, SignupDto>, res: Response, next: NextFunction): Promise<void> => {
     try {
       const signupDto: SignupDto = req.body;
-      const result = await this.userService.signup(signupDto);
+      const { newUser, token } = await this.userService.signup(signupDto);
 
-      const refreshToken = generateRefreshToken(result.newUser.id!);
-      await this.tokenService.create(result.newUser.id!, refreshToken);
+      const refreshToken = generateRefreshToken(newUser.id!);
+      await this.tokenService.create(newUser.id!, refreshToken);
 
       const response = {
         user: {
-          id: result.newUser.id,
-          email: result.newUser.email,
-          name: result.newUser.name,
+          id: newUser.id,
+          email: newUser.email,
+          name: newUser.name,
         },
-        accessToken: result.token,
+        accessToken: token,
       };
       setRefreshCookie(res, refreshToken);
       sendSuccess(res, 201, response);
@@ -41,29 +41,32 @@ export class AuthController {
     }
   };
 
-  //   heartbeat = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  //     try {
-  //       const result = await this.userService.heartbeat();
-  //       res.status(result.success ? 200 : 400).json(result);
-  //     } catch (error) {
-  //       next(error);
-  //     }
-  //   };
 
+  login = async (req: Request<{}, {}, LoginDto>, res: Response, next: NextFunction)
+    : Promise<void> => {
 
-  login = async (
-    req: Request<{}, {}, LoginInputTypes>,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
     try {
-      const loginInputObj: LoginInputTypes = req.body; // Map request body to Obj
-      const result = await this.userService.login(loginInputObj);
-      res.status(result.success ? 200 : 400).json(result);
+      const loginDto: LoginDto = req.body;
+      const { user, token } = await this.userService.login(loginDto);
+
+      const refreshToken = generateRefreshToken(user.id!);
+      await this.tokenService.create(user.id!, refreshToken);
+
+      const response = {
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        },
+        accessToken: token,
+      };
+      setRefreshCookie(res, refreshToken);
+      sendSuccess(res, 201, response);
     } catch (error) {
       next(error);
     }
   };
+
 
   refresh = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -108,18 +111,4 @@ export class AuthController {
       next(error);
     }
   }
-
-
-  // getProfile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  //   try {
-  //     const userId = req.userId; // Assuming middleware adds `userId` to `req`
-  //     //TODO: add better logic for userId check
-  //     if (userId) {
-  //       const result = await this.userService.getProfile(userId);
-  //       res.status(result.success ? 200 : 404).json(result);
-  //     }
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // };
 }

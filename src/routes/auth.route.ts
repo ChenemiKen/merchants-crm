@@ -18,9 +18,7 @@ const authController = new AuthController(userService, tokenService);
 
 
 router.post('/signup', validateRequest(SignupSchema), authController.signup);
-router.post('/login', validateRequest(LoginSchema), (req, res) => {
-    res.send('Login');
-});
+router.post('/login', validateRequest(LoginSchema), authController.login);
 router.post('/refresh', authController.refresh);
 router.post('/logout', authController.logout)
 

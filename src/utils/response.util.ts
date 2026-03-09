@@ -10,7 +10,6 @@ export const sendSuccess = (
         success: true,
         message,
         data,
-        error: null,
     });
 };
 
@@ -23,7 +22,6 @@ export const sendError = (
     return res.status(statusCode).json({
         success: false,
         message,
-        data: null,
         error,
     });
 };
