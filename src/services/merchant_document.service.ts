@@ -1,4 +1,4 @@
-import { DuplicateModelException, InvalidStateException, NotFoundException } from "@/constants/exceptions";
+import { DuplicateModelException, NotFoundException } from "@/constants/exceptions";
 import MerchantDocumentRepository from "@/db/repositories/merchant_document.repository";
 import { CreateMerchantDocumentDto, UpdateMerchantDocumentDto } from "@/models/schemas/merchant.schema";
 import MerchantService from "./merchant.service";

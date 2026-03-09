@@ -1,5 +1,5 @@
 import { ValidationException } from '@/constants/exceptions';
-import { CreateMerchantDto, MerchantQueryDto, MerchantQuerySchema, UpdateMerchantDto } from '@/models/schemas/merchant.schema';
+import { CreateMerchantDto, MerchantQueryDto, MerchantQuerySchema, UpdateMerchantDto, UpdateMerchantStatusDto } from '@/models/schemas/merchant.schema';
 import MerchantService from '@/services/merchant.service';
 import { sendSuccess } from '@/utils/response.util';
 import { NextFunction, Request, Response } from 'express';
@@ -54,6 +54,20 @@ export class MerchantController {
                 throw new ValidationException(msg, msg);
             }
             const updated = await this.merchantService.update(parsed.data, req.body);
+            sendSuccess(res, 200, updated);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    updateStatus = async (req: Request<{ id: string }, {}, UpdateMerchantStatusDto>, res: Response, next: NextFunction) => {
+        try {
+            const msg = "Invalid merchant ID";
+            const parsed = z.string().uuid(msg).safeParse(req.params.id);
+            if (!parsed.success) {
+                throw new ValidationException(msg, msg);
+            }
+            const updated = await this.merchantService.updateStatus(parsed.data, req.body);
             sendSuccess(res, 200, updated);
         } catch (error) {
             next(error);

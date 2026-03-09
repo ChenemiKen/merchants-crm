@@ -53,7 +53,7 @@ export const errorHandler = (
     if (err instanceof InvalidStateException) {
         return res.status(400).json({
             success: false,
-            message: "Unauthorized",
+            message: err.message,
             error: err.message
         });
     }

@@ -1,4 +1,4 @@
-import { CreateMerchantDto, MerchantQueryDto, UpdateMerchantDto } from "@/models/schemas/merchant.schema";
+import { CreateMerchantDto, MerchantQueryDto, MerchantStatus, UpdateMerchantDto } from "@/models/schemas/merchant.schema";
 import { Database } from "../database";
 import { merchants, merchantStatusEnum } from "../schemas/merchant.schema";
 import { and, ilike, eq, or, SQL, count } from "drizzle-orm";
@@ -85,7 +85,7 @@ export default class MerchantRepository {
         });
     }
 
-    async update(merchantId: string, data: UpdateMerchantDto) {
+    async update(merchantId: string, data: UpdateMerchantDto & { status?: MerchantStatus }) {
         const db = this.database.getInstance();
 
         const [updated] = await db

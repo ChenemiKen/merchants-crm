@@ -16,7 +16,6 @@ export const CreateMerchantSchema = z.object({
     category: z.string().min(2, "Category must be at least 2 characters long").max(255),
     city: z.string().min(2, "City must be at least 2 characters long").max(255),
     contactEmail: z.string().email("Invalid email format").max(255),
-    status: MerchantStatusEnum.optional(),
 });
 
 // Update Merchant Schema (all fields optional)
@@ -25,7 +24,6 @@ export const UpdateMerchantSchema = z.object({
     category: z.string().min(2).max(255).optional(),
     city: z.string().min(2).max(255).optional(),
     contactEmail: z.string().email("Invalid file URL").max(255).optional(),
-    status: MerchantStatusEnum.optional(),
 });
 
 // Create Merchant Document Schema
@@ -57,7 +55,7 @@ export const MerchantQuerySchema = z.object({
     limit: z.coerce.number().int().min(1).max(100).default(20),
 });
 
-// Types
+export type MerchantStatus = z.infer<typeof MerchantStatusEnum>;
 export type CreateMerchantDto = z.infer<typeof CreateMerchantSchema>;
 export type UpdateMerchantDto = z.infer<typeof UpdateMerchantSchema>;
 export type CreateMerchantDocumentDto = z.infer<typeof CreateMerchantDocumentSchema>;
