@@ -4,7 +4,7 @@ import { merchants, merchantStatusEnum } from "../schemas/merchant.schema";
 import { and, ilike, eq, or, SQL, count } from "drizzle-orm";
 
 
-export default class MerchantRepository {
+export default class MerchantDocumentRepository {
     private readonly database: Database;
 
     constructor(database: Database) {

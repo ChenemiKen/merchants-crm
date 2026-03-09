@@ -1,5 +1,5 @@
 import { ValidationException } from '@/constants/exceptions';
-import { CreateMerchantDto, MerchantQueryDto, MerchantQuerySchema, UpdateMerchantDto } from '@/domain/models/schemas/merchant.schema';
+import { CreateMerchantDto, MerchantQueryDto, MerchantQuerySchema, UpdateMerchantDto } from '@/models/schemas/merchant.schema';
 import MerchantService from '@/services/merchant.service';
 import { sendSuccess } from '@/utils/response.util';
 import { NextFunction, Request, Response } from 'express';

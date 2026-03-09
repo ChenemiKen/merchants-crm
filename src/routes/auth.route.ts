@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { validateRequest } from '../middleware/validation.middleware';
-import { LoginSchema, SignupSchema } from '../domain/models/schemas/auth.schema';
+import { LoginSchema, SignupSchema } from '../models/schemas/auth.schema';
 import { AuthController } from '@/controllers/auth.controller';
 import { UserService } from '@/services/user.service';
 import { UserRepository } from '@/db/repositories/user.repository';

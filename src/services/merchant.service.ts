@@ -1,6 +1,6 @@
 import { NotFoundException } from "@/constants/exceptions";
 import MerchantRepository from "@/db/repositories/merchant.repository";
-import { CreateMerchantDto, MerchantQueryDto, UpdateMerchantDto } from "@/domain/models/schemas/merchant.schema";
+import { CreateMerchantDto, MerchantQueryDto, UpdateMerchantDto } from "@/models/schemas/merchant.schema";
 
 export default class MerchantService {
     private readonly merchantRepository: MerchantRepository;

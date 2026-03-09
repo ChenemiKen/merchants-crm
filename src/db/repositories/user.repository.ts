@@ -1,4 +1,4 @@
-import { User } from "@/domain/models/entities/user.entity";
+import { User } from "@/models/entities/user.entity";
 import { Database } from "../database";
 import { UserEntity, userTable } from "../schemas/user.schema";
 import { eq } from "drizzle-orm";

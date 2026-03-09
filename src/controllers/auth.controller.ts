@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserService } from '../services/user.service';
-import { SignupDto, LoginDto } from '@/domain/models/dto/auth.dto';
+import { SignupDto, LoginDto } from '@/models/dto/auth.dto';
 import { sendSuccess } from '@/utils/response.util';
 import { generateRefreshToken, setRefreshCookie } from '@/utils/token.util';
 import { UnauthorizedException } from '@/constants/exceptions';

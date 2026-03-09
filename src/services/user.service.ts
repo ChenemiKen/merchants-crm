@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 
 import { generateAccessToken } from '@/utils/token.util';
-import { SignupDto, LoginDto } from '../domain/models/dto/auth.dto';
+import { SignupDto, LoginDto } from '../models/dto/auth.dto';
 import { UserRepository } from '@/db/repositories/user.repository';
 import { DuplicateModelException, NotFoundException, UnauthorizedException } from '@/constants/exceptions';
 
