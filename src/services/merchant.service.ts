@@ -1,9 +1,11 @@
 import { InvalidStateException, NotFoundException } from "@/constants/exceptions";
 import MerchantRepository from "@/db/repositories/merchant.repository";
+import { MerchantEntity } from "@/db/schemas/merchant.schema";
 import {
     CreateMerchantDto, MerchantQueryDto, MerchantStatus,
     UpdateMerchantDto, UpdateMerchantStatusDto
 } from "@/models/schemas/merchant.schema";
+import MerchantStatusHistoryService from "./merchant_status_history.service";
 
 
 const transitions: Record<MerchantStatus, MerchantStatus[]> = {
@@ -14,9 +16,13 @@ const transitions: Record<MerchantStatus, MerchantStatus[]> = {
 
 export default class MerchantService {
     private readonly merchantRepository: MerchantRepository;
+    private readonly merchantStatusHistoryService: MerchantStatusHistoryService;
 
-    constructor(merchantRepository: MerchantRepository) {
+    constructor(merchantRepository: MerchantRepository,
+        merchantStatusHistoryService: MerchantStatusHistoryService
+    ) {
         this.merchantRepository = merchantRepository;
+        this.merchantStatusHistoryService = merchantStatusHistoryService;
     }
 
     create = async (merchantDto: CreateMerchantDto) => {
@@ -35,7 +41,7 @@ export default class MerchantService {
         return merchant;
     }
 
-    update = async (merchantId: string, data: UpdateMerchantDto) => {
+    update = async (merchantId: string, data: UpdateMerchantDto): Promise<MerchantEntity> => {
         // Ensure merchant exists first
         await this.fetchOne(merchantId);
         return await this.merchantRepository.update(merchantId, data);
@@ -49,10 +55,16 @@ export default class MerchantService {
         }
     }
 
-    updateStatus = async (merchantId: string, data: UpdateMerchantStatusDto) => {
-        const merchant = await this.fetchOne(merchantId);
-        this.validateTransition(merchant.status as MerchantStatus, data.status);
+    updateStatus = async (merchantId: string, data: UpdateMerchantStatusDto, userId: string)
+        : Promise<MerchantEntity> => {
+        let merchant = await this.fetchOne(merchantId);
+        const oldStatus = merchant.status as MerchantStatus;
+        this.validateTransition(oldStatus, data.status);
 
-        return await this.merchantRepository.update(merchantId, { status: data.status });
+        merchant = await this.merchantRepository.update(merchantId, { status: data.status });
+
+        await this.merchantStatusHistoryService.create(merchant, userId, oldStatus, data.reason);
+
+        return merchant;
     }
 }

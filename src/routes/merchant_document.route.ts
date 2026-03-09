@@ -8,13 +8,17 @@ import MerchantDocumentService from "@/services/merchant_document.service";
 import { MerchantDocumentController } from "@/controllers/merchant_document.controller";
 import MerchantService from "@/services/merchant.service";
 import MerchantRepository from "@/db/repositories/merchant.repository";
+import MerchantStatusHistoryRepository from "@/db/repositories/merchant_status_history.repository";
+import MerchantStatusHistoryService from "@/services/merchant_status_history.service";
 
 const router = Router();
 
 const database = new Database();
 const merchantDocumentRepository = new MerchantDocumentRepository(database);
 const merchantRepository = new MerchantRepository(database);
-const merchantService = new MerchantService(merchantRepository);
+const merchantStatusHistoryRepository = new MerchantStatusHistoryRepository(database);
+const merchantStatusHistoryService = new MerchantStatusHistoryService(merchantStatusHistoryRepository);
+const merchantService = new MerchantService(merchantRepository, merchantStatusHistoryService);
 const merchantDocumentService = new MerchantDocumentService(merchantDocumentRepository, merchantService);
 const merchantDocumentController = new MerchantDocumentController(merchantDocumentService);
 

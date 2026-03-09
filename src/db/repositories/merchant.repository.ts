@@ -1,3 +1,4 @@
+import { NotFoundException } from "@/constants/exceptions";
 import { CreateMerchantDto, MerchantQueryDto } from "@/models/schemas/merchant.schema";
 import { Database } from "../database";
 import { MerchantEntity, merchants, merchantStatusEnum } from "../schemas/merchant.schema";
@@ -93,6 +94,10 @@ export default class MerchantRepository {
             .set({ ...data, updatedAt: new Date() })
             .where(eq(merchants.id, merchantId))
             .returning();
+
+        if (!updated) {
+            throw new NotFoundException(`Merchant with ID ${merchantId} not found`);
+        }
 
         return updated;
     }

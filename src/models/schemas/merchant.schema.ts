@@ -63,3 +63,11 @@ export const UpdateMerchantDocumentSchema = z.object({
 
 export type CreateMerchantDocumentDto = z.infer<typeof CreateMerchantDocumentSchema>;
 export type UpdateMerchantDocumentDto = z.infer<typeof UpdateMerchantDocumentSchema>;
+
+// Merchant History Query Schema
+export const MerchantHistoryQuerySchema = z.object({
+    page: z.coerce.number().int().min(1).default(1),
+    limit: z.coerce.number().int().min(1).max(100).default(20),
+});
+
+export type MerchantHistoryQueryDto = z.infer<typeof MerchantHistoryQuerySchema>;

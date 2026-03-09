@@ -5,6 +5,7 @@ import * as userSchema from './schemas/user.schema';
 import * as refreshTokenSchema from './schemas/refresh_token.schema';
 import * as merchantSchema from './schemas/merchant.schema';
 import * as merchantDocumentSchema from './schemas/merchant_document.schema';
+import * as merchantStatusHistorySchema from './schemas/merchant_status_history.schema';
 import { env, integerEnv } from '../config/env';
 
 export type DatabaseConfig = {
@@ -18,7 +19,10 @@ export type DatabaseConfig = {
 
 // Helper function to create db instance with proper typing
 const buildDrizzle = (pool: Pool) => drizzle({
-  schema: { ...userSchema, ...refreshTokenSchema, ...merchantSchema, ...merchantDocumentSchema },
+  schema: {
+    ...userSchema, ...refreshTokenSchema, ...merchantSchema, ...merchantDocumentSchema,
+    ...merchantStatusHistorySchema
+  },
   client: pool,
 });
 

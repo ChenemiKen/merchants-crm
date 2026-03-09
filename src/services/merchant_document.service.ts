@@ -38,7 +38,6 @@ export default class MerchantDocumentService {
     }
 
     update = async (documentId: string, data: UpdateMerchantDocumentDto) => {
-        // Ensure merchant exists first
         const document = await this.fetchOne(documentId);
         const doc = await this.merchantDocumentRepository.findByMerchantIdAndType(document.merchantId, data.type)
         if (doc && doc.id !== documentId) {
