@@ -2,6 +2,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 
 import * as userSchema from './schemas/user.schema';
+import * as refreshTokenSchema from './schemas/refresh_token.schema';
 import { env, integerEnv } from '../config/env';
 
 export type DatabaseConfig = {
@@ -15,7 +16,7 @@ export type DatabaseConfig = {
 
 // Helper function to create db instance with proper typing
 const buildDrizzle = (pool: Pool) => drizzle({
-  schema: { ...userSchema },
+  schema: { ...userSchema, ...refreshTokenSchema },
   client: pool,
 });
 

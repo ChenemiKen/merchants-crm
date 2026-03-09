@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 
 // import { ERROR, SUCCESS } from '../../../constants/messages';
-// import { generateToken } from '../../../utils/generate-token.util';
+import { generateAccessToken } from '@/utils/token.util';
 import { SignupDto, LoginDto } from '../domain/models/dto/auth.dto';
 import { UserRepository } from '@/db/repositories/user.repository';
 import { DuplicateModelException } from '@/constants/exceptions';
@@ -27,8 +27,8 @@ export class UserService {
       updatedAt: new Date(),
     });
 
-    // const token = generateToken(newUser.id, newUser.role?.name || 'user');
-    return newUser;
+    const token = generateAccessToken(newUser.id!, newUser.email);
+    return { newUser, token };
   }
 
   //   async heartbeat() {

@@ -1,4 +1,4 @@
-import { DuplicateModelException, InvalidStateException, NotFoundException, ValidationException } from "@/constants/exceptions";
+import { DuplicateModelException, InvalidStateException, NotFoundException, UnauthorizedException, ValidationException } from "@/constants/exceptions";
 import { ErrorRequestHandler, Request, Response, NextFunction } from "express";
 
 const environment = process.env.NODE_ENV || 'prod';
@@ -34,6 +34,14 @@ export const errorHandler = (
         });
     }
 
+    if (err instanceof UnauthorizedException) {
+        return res.status(401).json({
+            success: false,
+            message: err.message,
+            error: err.message
+        });
+    }
+
     if (err instanceof ValidationException) {
         return res.status(400).json({
             success: false,
@@ -45,7 +53,7 @@ export const errorHandler = (
     if (err instanceof InvalidStateException) {
         return res.status(400).json({
             success: false,
-            message: err.message,
+            message: "Unauthorized",
             error: err.message
         });
     }

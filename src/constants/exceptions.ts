@@ -29,3 +29,10 @@ export class NotFoundException extends Error {
         this.name = "NotFoundException";
     }
 }
+
+export class UnauthorizedException extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "UnauthorizedException";
+    }
+}
