@@ -6,6 +6,7 @@ import config from '@/config/config';
 interface AuthPayload {
     userId: string;
     email: string;
+    role: string;
 }
 
 export function auth(req: Request, res: Response, next: NextFunction) {
@@ -21,7 +22,7 @@ export function auth(req: Request, res: Response, next: NextFunction) {
 
     try {
         const decodedToken = jwt.verify(token, config.JWT_SECRET!) as AuthPayload;
-        req.user = { id: decodedToken.userId, email: decodedToken.email };
+        req.user = { id: decodedToken.userId, email: decodedToken.email, role: decodedToken.role };
         next();
     } catch (err: any) {
         if (err.name === 'TokenExpiredError') {
@@ -29,4 +30,13 @@ export function auth(req: Request, res: Response, next: NextFunction) {
         }
         throw new UnauthorizedException('Invalid token');
     }
+}
+
+export function authorize(roles: string[]) {
+    return (req: Request, res: Response, next: NextFunction) => {
+        if (!req.user || !roles.includes(req.user.role)) {
+            throw new UnauthorizedException('Forbidden: Insufficient permissions');
+        }
+        next();
+    };
 }

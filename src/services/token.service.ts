@@ -25,7 +25,7 @@ export class TokenService {
             revokedAt: new Date()
         });
 
-        const newAccessToken = generateAccessToken(user.id, user.email);
+        const newAccessToken = generateAccessToken(user.id, user.email, user.role);
         const newRefreshToken = generateRefreshToken(user.id);
         await this.create(user.id, newRefreshToken);
 

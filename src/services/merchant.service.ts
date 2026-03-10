@@ -78,4 +78,8 @@ export default class MerchantService {
 
         return merchant;
     }
+
+    delete = async (merchantId: string) => {
+        return await this.merchantRepository.softDelete(merchantId);
+    }
 }

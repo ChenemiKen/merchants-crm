@@ -4,7 +4,7 @@ import config from '@/config/config';
 
 
 export function generateAccessToken(userId: string, email: string,
-    role = "operator"): string {
+    role: string): string {
     if (config.JWT_SECRET) {
         const token = jwt.sign(
             { userId, email, role },

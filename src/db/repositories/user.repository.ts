@@ -20,6 +20,7 @@ export class UserRepository {
         email: userData.email,
         name: userData.name,
         password: userData.password,
+        role: userData.role,
         createdAt: userData.createdAt,
         updatedAt: userData.updatedAt,
         deletedAt: userData.deletedAt,

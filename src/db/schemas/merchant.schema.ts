@@ -22,7 +22,8 @@ export const merchants = pgTable("merchants", {
 
     createdAt: timestamp("created_at").defaultNow(),
 
-    updatedAt: timestamp("updated_at").defaultNow()
+    updatedAt: timestamp("updated_at").defaultNow(),
+    deletedAt: timestamp("deleted_at")
 })
 
 export type MerchantEntity = InferSelectModel<typeof merchants>;

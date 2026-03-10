@@ -2,7 +2,7 @@ import { NotFoundException } from "@/constants/exceptions";
 import { CreateMerchantDto, MerchantQueryDto } from "@/models/schemas/merchant.schema";
 import { Database } from "../database";
 import { MerchantEntity, merchants, merchantStatusEnum } from "../schemas/merchant.schema";
-import { and, ilike, eq, or, SQL, count } from "drizzle-orm";
+import { and, ilike, eq, or, SQL, count, isNull } from "drizzle-orm";
 
 
 export default class MerchantRepository {
@@ -34,7 +34,7 @@ export default class MerchantRepository {
         const { search, status, category, city, page = 1, limit = 20 } = query;
         const offset = (page - 1) * limit;
 
-        const filters: SQL[] = [];
+        const filters: SQL[] = [isNull(merchants.deletedAt)];
 
         if (search) {
             filters.push(
@@ -82,7 +82,7 @@ export default class MerchantRepository {
     async fetchOne(merchantId: string) {
         const db = this.database.getInstance();
         return await db.query.merchants.findFirst({
-            where: eq(merchants.id, merchantId)
+            where: and(eq(merchants.id, merchantId), isNull(merchants.deletedAt))
         });
     }
 
@@ -100,5 +100,21 @@ export default class MerchantRepository {
         }
 
         return updated;
+    }
+
+    async softDelete(merchantId: string) {
+        const db = this.database.getInstance();
+
+        const [deleted] = await db
+            .update(merchants)
+            .set({ deletedAt: new Date(), updatedAt: new Date() })
+            .where(and(eq(merchants.id, merchantId), isNull(merchants.deletedAt)))
+            .returning();
+
+        if (!deleted) {
+            throw new NotFoundException(`Merchant with ID ${merchantId} not found or already deleted`);
+        }
+
+        return deleted;
     }
 }

@@ -12,6 +12,8 @@ interface Config {
     REFRESH_TOKEN_EXPIRY_SEC: number;
     REDIS_HOST: string;
     REDIS_PORT: number;
+    NOTIFICATION_RETRY_DELAY: number;
+    NOTIFICATION_MAX_RETRIES: number;
 }
 
 const config: Config = {
@@ -23,6 +25,8 @@ const config: Config = {
     REFRESH_TOKEN_EXPIRY_SEC: Number(process.env.REFRESH_TOKEN_EXPIRY_SEC) || 3 * 24 * 60 * 60 * 1000,
     REDIS_HOST: process.env.REDIS_HOST!,
     REDIS_PORT: Number(process.env.REDIS_PORT) || 6379,
+    NOTIFICATION_RETRY_DELAY: Number(process.env.NOTIFICATION_RETRY_DELAY) || 5000,
+    NOTIFICATION_MAX_RETRIES: Number(process.env.NOTIFICATION_MAX_RETRIES) || 3,
 };
 
 export default config;

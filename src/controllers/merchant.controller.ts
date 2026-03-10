@@ -91,4 +91,15 @@ export class MerchantController {
         }
     }
 
+    delete = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+        try {
+            const merchantId = req.params.id;
+            this.verifyMerchantId(merchantId);
+            const deleted = await this.merchantService.delete(merchantId);
+            sendSuccess(res, 200, deleted);
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }

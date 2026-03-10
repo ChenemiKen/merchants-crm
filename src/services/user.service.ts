@@ -24,7 +24,7 @@ export class UserService {
       name,
     });
 
-    const token = generateAccessToken(newUser.id!, newUser.email);
+    const token = generateAccessToken(newUser.id!, newUser.email, newUser.role);
     return { newUser, token };
   }
 
@@ -41,7 +41,7 @@ export class UserService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const token = generateAccessToken(user.id!, user.email);
+    const token = generateAccessToken(user.id!, user.email, user.role);
     return { user, token };
   }
 }
