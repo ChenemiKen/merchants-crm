@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserService } from '../services/user.service';
-import { SignupDto, LoginDto } from '@/models/dto/auth.dto';
 import { sendSuccess } from '@/utils/response.util';
 import { generateRefreshToken, setRefreshCookie } from '@/utils/token.util';
 import { UnauthorizedException } from '@/constants/exceptions';
 import config from '@/config/config';
 import { TokenService } from '@/services/token.service';
+import { SignupDto, LoginDto } from '@/models/schemas/auth.schema';
 
 
 export class AuthController {

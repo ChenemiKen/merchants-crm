@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
 
 import { generateAccessToken } from '@/utils/token.util';
-import { SignupDto, LoginDto } from '../models/dto/auth.dto';
 import { UserRepository } from '@/db/repositories/user.repository';
 import { DuplicateModelException, NotFoundException, UnauthorizedException } from '@/constants/exceptions';
+import { LoginDto, SignupDto } from '@/models/schemas/auth.schema';
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) { }
@@ -22,8 +22,6 @@ export class UserService {
       email,
       password: hashedPassword,
       name,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
 
     const token = generateAccessToken(newUser.id!, newUser.email);

@@ -1,4 +1,4 @@
-import type { InferSelectModel } from 'drizzle-orm';
+import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import { uuid, pgTable, varchar, timestamp } from 'drizzle-orm/pg-core';
 
 export const userTable = pgTable('user', {
@@ -12,3 +12,4 @@ export const userTable = pgTable('user', {
 });
 
 export type UserEntity = InferSelectModel<typeof userTable>;
+export type UserInsertModel = InferInsertModel<typeof userTable>;

@@ -46,3 +46,6 @@ export const LoginSchema = z.object({
         .nonempty({ message: 'Email is required' }),
     password: z.string().nonempty({ message: 'Password is required' }),
 });
+
+export type SignupDto = z.infer<typeof SignupSchema>;
+export type LoginDto = z.infer<typeof LoginSchema>;

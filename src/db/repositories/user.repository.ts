@@ -1,6 +1,5 @@
-import { User } from "@/models/entities/user.entity";
 import { Database } from "../database";
-import { UserEntity, userTable } from "../schemas/user.schema";
+import { UserEntity, UserInsertModel, userTable } from "../schemas/user.schema";
 import { eq } from "drizzle-orm";
 
 
@@ -12,7 +11,7 @@ export class UserRepository {
     this.database = database;
   }
 
-  async create(userData: User): Promise<User> {
+  async create(userData: UserInsertModel): Promise<UserEntity> {
     const db = this.database.getInstance();
 
     const newUser = await db.transaction(async (tx) => {
@@ -26,10 +25,14 @@ export class UserRepository {
         deletedAt: userData.deletedAt,
       }).returning();
 
+      if (!newUser) {
+        throw new Error("Failed to create user");
+      }
+
       return newUser;
     });
 
-    return this.toUser(newUser!);
+    return newUser;
   }
 
   async existsByEmail(email: string): Promise<boolean> {
@@ -40,19 +43,7 @@ export class UserRepository {
     return result.length > 0;
   }
 
-  private toUser(user: UserEntity): User {
-    return new User({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-      deletedAt: user.deletedAt,
-    });
-  }
-
-  async findUserByEmail(email: string) {
+  async findUserByEmail(email: string): Promise<UserEntity | undefined> {
     const db = this.database.getInstance();
     const user = await db.query.userTable.findFirst({
       where: eq(userTable.email, email)
