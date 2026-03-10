@@ -1,5 +1,6 @@
 import { uuid, pgTable, text, timestamp, jsonb, integer } from 'drizzle-orm/pg-core';
 import { notificationSubscribers } from './notification_subscriber.schema';
+import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 
 
 export const notifications = pgTable("notifications", {
@@ -16,9 +17,12 @@ export const notifications = pgTable("notifications", {
 
     attempts: integer("attempts").default(0),
 
-    nextRetryAt: timestamp("next_retry_at"),
+    response: jsonb("response"),
 
     createdAt: timestamp("created_at").defaultNow(),
 
     updateAt: timestamp("updated_at").defaultNow()
 })
+
+export type NotificationEntity = InferSelectModel<typeof notifications>;
+export type NotificationInsert = InferInsertModel<typeof notifications>;

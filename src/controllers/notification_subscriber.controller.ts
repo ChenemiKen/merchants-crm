@@ -57,4 +57,14 @@ export default class NotificationSubscriberController {
             next(error);
         }
     }
+
+
+    handleWebhook = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // const result = await this.service.handleWebhook(req);
+            sendSuccess(res, 200, "Webhook received successfully");
+        } catch (error) {
+            next(error);
+        }
+    }
 }

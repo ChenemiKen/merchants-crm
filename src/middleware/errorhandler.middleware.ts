@@ -1,5 +1,6 @@
 import { DuplicateModelException, InvalidStateException, NotFoundException, UnauthorizedException, ValidationException } from "@/constants/exceptions";
-import { ErrorRequestHandler, Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
+import logger from "@/utils/logger.util";
 
 const environment = process.env.NODE_ENV || 'prod';
 
@@ -14,12 +15,14 @@ export interface AppError {
 }
 
 export const errorHandler = (
-    err: ErrorRequestHandler,
+    err: Error,
     req: Request,
     res: Response,
     next: NextFunction,
 ): Response | void => {
     if (environment === 'development') { console.log("Error💥:", err); }
+
+    logger.error({ error: err }, err.message);
 
     if (err instanceof SyntaxError &&
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -6,6 +6,7 @@ import {
     UpdateMerchantDto, UpdateMerchantStatusDto
 } from "@/models/schemas/merchant.schema";
 import MerchantStatusHistoryService from "./merchant_status_history.service";
+import NotificationService from "./notification.service";
 
 
 const transitions: Record<MerchantStatus, MerchantStatus[]> = {
@@ -17,12 +18,15 @@ const transitions: Record<MerchantStatus, MerchantStatus[]> = {
 export default class MerchantService {
     private readonly merchantRepository: MerchantRepository;
     private readonly merchantStatusHistoryService: MerchantStatusHistoryService;
+    private readonly notificationService: NotificationService;
 
     constructor(merchantRepository: MerchantRepository,
-        merchantStatusHistoryService: MerchantStatusHistoryService
+        merchantStatusHistoryService: MerchantStatusHistoryService,
+        notificationService: NotificationService
     ) {
         this.merchantRepository = merchantRepository;
         this.merchantStatusHistoryService = merchantStatusHistoryService;
+        this.notificationService = notificationService;
     }
 
     create = async (merchantDto: CreateMerchantDto) => {
@@ -64,6 +68,13 @@ export default class MerchantService {
         merchant = await this.merchantRepository.update(merchantId, { status: data.status });
 
         await this.merchantStatusHistoryService.create(merchant, userId, oldStatus, data.reason);
+
+        await this.notificationService.createNotification("merchant.status_changed", {
+            merchantId: merchant.id,
+            oldStatus,
+            newStatus: merchant.status,
+            reason: data.reason
+        });
 
         return merchant;
     }

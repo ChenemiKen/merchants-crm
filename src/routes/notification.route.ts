@@ -25,4 +25,6 @@ router.get("/subscribers", auth, subscriberController.fetchAll);
 router.get("/subscribers/:id", auth, subscriberController.fetchOne);
 router.patch("/subscribers/:id", auth, validateRequest(UpdateNotificationSubscriberSchema), subscriberController.update);
 
+router.post("/webhook", subscriberController.handleWebhook);
+
 export default router;

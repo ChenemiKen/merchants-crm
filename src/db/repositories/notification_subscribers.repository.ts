@@ -1,10 +1,7 @@
 import { eq, sql } from "drizzle-orm";
 import { Database } from "../database";
-import { notificationSubscribers } from "../schemas/notification_subscriber.schema";
-import { InferInsertModel, InferSelectModel } from "drizzle-orm";
+import { NotificationSubscriberInsert, notificationSubscribers } from "../schemas/notification_subscriber.schema";
 
-export type NotificationSubscriberEntity = InferSelectModel<typeof notificationSubscribers>;
-export type NotificationSubscriberInsert = InferInsertModel<typeof notificationSubscribers>;
 
 export default class NotificationSubscriberRepository {
     private readonly database: Database;
@@ -42,6 +39,16 @@ export default class NotificationSubscriberRepository {
             data,
             total: Number(countResult[0]?.count ?? 0)
         };
+    }
+
+    async findAll() {
+        const db = this.database.getInstance();
+        return await db.select().from(notificationSubscribers);
+    }
+
+    async fetchAllActive() {
+        const db = this.database.getInstance();
+        return await db.select().from(notificationSubscribers).where(eq(notificationSubscribers.isActive, true));
     }
 
     async findOne(id: string) {

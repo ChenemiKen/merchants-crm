@@ -35,6 +35,10 @@ export default class NotificationSubscriberService {
         };
     }
 
+    fetchAllActive = async () => {
+        return await this.repository.fetchAllActive();
+    }
+
     fetchOne = async (id: string) => {
         const subscriber = await this.repository.findOne(id);
         if (!subscriber) {

@@ -1,3 +1,4 @@
+import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import { uuid, pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
 
 export const notificationSubscribers = pgTable("notification_subscribers", {
@@ -15,3 +16,6 @@ export const notificationSubscribers = pgTable("notification_subscribers", {
 
     updateAt: timestamp("updated_at").defaultNow()
 })
+
+export type NotificationSubscriberEntity = InferSelectModel<typeof notificationSubscribers>;
+export type NotificationSubscriberInsert = InferInsertModel<typeof notificationSubscribers>;
