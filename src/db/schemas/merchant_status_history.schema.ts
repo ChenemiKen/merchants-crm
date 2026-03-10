@@ -11,9 +11,9 @@ export const merchantStatusHistory = pgTable("merchant_status_history", {
         .notNull()
         .references(() => merchants.id),
 
-    oldStatus: merchantStatusEnum("old_status").notNull(),
+    changedFrom: merchantStatusEnum("changed_from").notNull(),
 
-    newStatus: merchantStatusEnum("new_status").notNull(),
+    changedTo: merchantStatusEnum("changed_to").notNull(),
 
     changedBy: uuid("changed_by")
         .notNull()

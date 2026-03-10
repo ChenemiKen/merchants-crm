@@ -10,11 +10,11 @@ export default class MerchantStatusHistoryService {
         this.merchantStatusHistoryRepo = merchantStatusHistoryRepo;
     }
 
-    async create(merchant: MerchantEntity, userId: string, oldStatus: MerchantStatus, reason?: string) {
+    async create(merchant: MerchantEntity, userId: string, changedFrom: MerchantStatus, reason?: string) {
         const record: MerchantStatusHistoryInsert = {
             merchantId: merchant.id,
-            oldStatus,
-            newStatus: merchant.status!,
+            changedFrom,
+            changedTo: merchant.status!,
             changedBy: userId,
             reason
         }

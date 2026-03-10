@@ -32,23 +32,23 @@ describe('MerchantService - Status Transitions', () => {
         );
     });
 
-    const testTransition = async (oldStatus: MerchantStatus, newStatus: MerchantStatus, shouldPass: boolean) => {
-        const merchant = { id: merchantId, status: oldStatus } as any;
+    const testTransition = async (changedFrom: MerchantStatus, changedTo: MerchantStatus, shouldPass: boolean) => {
+        const merchant = { id: merchantId, status: changedFrom } as any;
 
-        // Mock fetchOne to return the merchant with oldStatus
+        // Mock fetchOne to return the merchant with changedFrom
         jest.spyOn(merchantService, 'fetchOne' as any).mockResolvedValue(merchant);
 
         if (shouldPass) {
-            mockMerchantRepository.update.mockResolvedValue({ ...merchant, status: newStatus });
+            mockMerchantRepository.update.mockResolvedValue({ ...merchant, status: changedTo });
 
-            const result = await merchantService.updateStatus(merchantId, { status: newStatus, reason: 'Test' }, userId);
+            const result = await merchantService.updateStatus(merchantId, { status: changedTo, reason: 'Test' }, userId);
 
-            expect(result.status).toBe(newStatus);
-            expect(mockMerchantRepository.update).toHaveBeenCalledWith(merchantId, { status: newStatus });
+            expect(result.status).toBe(changedTo);
+            expect(mockMerchantRepository.update).toHaveBeenCalledWith(merchantId, { status: changedTo });
             expect(mockMerchantStatusHistoryService.create).toHaveBeenCalled();
             expect(mockNotificationService.createNotification).toHaveBeenCalled();
         } else {
-            await expect(merchantService.updateStatus(merchantId, { status: newStatus, reason: 'Test' }, userId))
+            await expect(merchantService.updateStatus(merchantId, { status: changedTo, reason: 'Test' }, userId))
                 .rejects.toThrow(InvalidStateException);
 
             expect(mockMerchantRepository.update).not.toHaveBeenCalled();

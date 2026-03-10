@@ -52,27 +52,27 @@ export default class MerchantService {
     }
 
 
-    private validateTransition(oldStatus: MerchantStatus, newStatus: MerchantStatus) {
-        if (!transitions[oldStatus].includes(newStatus)) {
+    private validateTransition(changedFrom: MerchantStatus, changedTo: MerchantStatus) {
+        if (!transitions[changedFrom].includes(changedTo)) {
             throw new InvalidStateException(
-                `Invalid status transition, can't go from ${oldStatus} to ${newStatus}`)
+                `Invalid status transition, can't go from ${changedFrom} to ${changedTo}`)
         }
     }
 
     updateStatus = async (merchantId: string, data: UpdateMerchantStatusDto, userId: string)
         : Promise<MerchantEntity> => {
         let merchant = await this.fetchOne(merchantId);
-        const oldStatus = merchant.status as MerchantStatus;
-        this.validateTransition(oldStatus, data.status);
+        const changedFrom = merchant.status as MerchantStatus;
+        this.validateTransition(changedFrom, data.status);
 
         merchant = await this.merchantRepository.update(merchantId, { status: data.status });
 
-        await this.merchantStatusHistoryService.create(merchant, userId, oldStatus, data.reason);
+        await this.merchantStatusHistoryService.create(merchant, userId, changedFrom, data.reason);
 
         await this.notificationService.createNotification("merchant.status_changed", {
             merchantId: merchant.id,
-            oldStatus,
-            newStatus: merchant.status,
+            changedFrom,
+            changedTo: merchant.status,
             reason: data.reason
         });
 
